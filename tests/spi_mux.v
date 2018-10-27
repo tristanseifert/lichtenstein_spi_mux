@@ -32,8 +32,8 @@ module spi_mux_test;
     $dumpfile("spi_mux.vcd");
     $dumpvars;
 
-    $display("\t\ttime,\tclk,\treset,\tspi_nCS,\tspi_sck,\tspi_mosi\tout");
-    $monitor("%d,\t%b,\t%b,\t%b,\t\t%b,\t\t%b,\t\t%d",$time, clk,reset,spi_nCS,spi_sck,spi_mosi,out);
+    // $display("\t\ttime,\tclk,\treset,\tspi_nCS,\tspi_sck,\tspi_mosi\tout");
+    // $monitor("%d,\t%b,\t%b,\t%b,\t\t%b,\t\t%b,\t\t%d",$time, clk,reset,spi_nCS,spi_sck,spi_mosi,out);
 
     // assert reset
     #3 begin reset = 1; end
@@ -48,7 +48,12 @@ module spi_mux_test;
     #2 begin spi_mosi = 0; end
     #14 begin spi_mosi = 1; end
     #2 begin spi_mosi = 0; end
-    #6 begin spi_nCS = 1; end
+
+    #6 begin spi_mosi = 1; end
+    #6 begin spi_mosi = 0; end
+
+    // end of signal
+    #10 begin spi_nCS = 1; end
 
 
     #2 begin $finish; end

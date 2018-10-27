@@ -41,7 +41,7 @@ parameter	STATE_RESET	= 4'b1000;
 reg		[3:0] state = STATE_IDLE;
 
 // counter for pulses of SCK
-// reg		[2:0]	sck_counter;
+reg		[2:0]	sck_counter;
 
 // buffer for output stat
 reg		[7:0] out_buf;
@@ -58,6 +58,7 @@ begin
 	status <= 0;
 
 	// reset output buffer
+  sck_counter <= 0;
 	out_buf <= 0;
 end
 
@@ -85,6 +86,8 @@ begin
 		state <= STATE_RESET;
 		out_buf <= 0;
 
+    sck_counter <= 0;
+
 		// deassert MISO
 		// spi_miso <= 1'bz;
 	end else begin
@@ -101,7 +104,7 @@ begin
 			// idle state, wait for CS to be asserted
 			STATE_IDLE: begin
 				// CS has gone low, shift data in
-				if(!spi_nCS) begin
+				if(~spi_nCS) begin
 					state <= STATE_SHIFT;
 				end
 			end
@@ -109,7 +112,7 @@ begin
 			// shift bits in until CS goes high
 			STATE_SHIFT: begin
 				// is CS high now?
-				if(!spi_nCS) begin
+				if(~spi_nCS) begin
 					// now, copy the value to the appropriate output
 					// out[sck_counter - 1] = 1;
 					// out[sck_counter] = spi_mosi;
@@ -117,8 +120,14 @@ begin
 					// increment the bit counter
 					out_buf <= {out_buf[6:0], spi_mosi};
 
-					// output it
-					out <= out_buf;
+          // increment counter
+          sck_counter <= sck_counter + 1;
+
+          // output if needed
+          if(sck_counter == 0) begin
+  					// output the buffer
+  					out <= out_buf;
+          end
 
 					// stay in this state
 					state <= STATE_SHIFT;
@@ -126,8 +135,12 @@ begin
 					// otherwise, go back to the idle state
 					state <= STATE_IDLE;
 
+					// copy the output buffer
+					out <= out_buf;
+
 					// be sure to reset counter
 					out_buf <= 0;
+          sck_counter <= 0;
 				end
 			end
 		endcase
