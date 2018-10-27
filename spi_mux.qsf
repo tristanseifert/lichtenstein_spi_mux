@@ -64,7 +64,6 @@ set_location_assignment PIN_5 -to spi_sck
 set_location_assignment PIN_7 -to clk
 set_location_assignment PIN_56 -to status[1]
 set_location_assignment PIN_55 -to status[0]
-set_global_assignment -name QIP_FILE shiftreg.qip
 set_location_assignment PIN_33 -to buffer_oe
 set_location_assignment PIN_29 -to out_en[3]
 set_location_assignment PIN_30 -to out_en[2]
