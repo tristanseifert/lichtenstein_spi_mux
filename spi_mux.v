@@ -14,6 +14,7 @@ input				spi_mosi;
 
 // SPI master input
 output			spi_miso;
+reg					spi_miso;
 
 // output bus
 output	[7:0]	out;
@@ -35,21 +36,38 @@ reg		[3:0] out_en;
 // state
 parameter	STATE_IDLE	= 4'b0000;
 parameter	STATE_SHIFT	= 4'b0001;
+parameter	STATE_RESET	= 4'b1000;
 
 reg		[3:0] state = STATE_IDLE;
 
 // counter for pulses of SCK
 reg		[3:0]	sck_counter;
 
-
-
-always @(posedge spi_sck)
+// initial state
+initial
 begin
+	spi_miso <= 1'bz;
+
+	out <= 0;
+	buffer_oe <= 0;
+	out_en <= 0;
+
+	// reset counter as well
+	sck_counter <= 0;
+end
+
+// always @(posedge clk, posedge spi_sck)
+always @(posedge clk)
+begin
+	// disable other status LEDs
+	status[2:1] = 0;
+	status[0] <= ~reset;
+
+	// miso is always hi z
+	spi_miso = 1'bz;
+
 	// the bus voltage translator is always active
 	buffer_oe <= 1;
-	
-	// status 0 is the reset bit but inverted
-	status[0] <= ~reset;
 
 	// is reset asserted?
 	if(~reset) begin
@@ -57,36 +75,48 @@ begin
 		out <= 0;
 		// disable differential drivers
 		out_en <= 0;
-		
+
 		// clear the counter and state
-		state <= STATE_IDLE;
+		state <= STATE_RESET;
 		sck_counter <= 0;
+
+		// deassert MISO
+		// spi_miso <= 1'bz;
 	end else begin
 		// reset is not asserted, do state machine-y stuff
 		case (state)
+			// reset state
+			STATE_RESET: begin
+				state <= STATE_IDLE;
+			end
+
 			// idle state, wait for CS to be asserted
 			STATE_IDLE: begin
-				if(~spi_nCS) begin
+				// CS has gone low, shift data in
+				if(!spi_nCS) begin
 					state <= STATE_SHIFT;
 				end
 			end
-			
+
 			// shift bits in until CS goes high
 			STATE_SHIFT: begin
 				// is CS high now?
-				if(~spi_nCS) begin
-					// if so, increment the counter
-					sck_counter <= sck_counter + 1;
-						
-					// now, copy the value to the appropriate output
-					out[sck_counter] = spi_mosi;
-					
+				if(!spi_nCS) begin
+					// is it the positive edge of sck?
+					// if(posedge spi_sck) begin
+						// if so, increment the counter
+						sck_counter <= sck_counter + 1;
+
+						// now, copy the value to the appropriate output
+						out[sck_counter] = spi_mosi;
+					// end
+
 					// stay in this state
 					state <= STATE_SHIFT;
 				end else begin
 					// otherwise, go back to the idle state
 					state <= STATE_IDLE;
-					
+
 					// be sure to reset counter
 					sck_counter <= 0;
 				end

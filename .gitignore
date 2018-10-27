@@ -1,3 +1,6 @@
+# waveform files from icarus verilog
+*.vcd
+
 /greybox_tmp
 *.png
 *.bak
