@@ -41,7 +41,7 @@ parameter	STATE_RESET	= 4'b1000;
 reg		[3:0] state = STATE_IDLE;
 
 // counter for pulses of SCK
-reg		[3:0]	sck_counter;
+reg		[2:0]	sck_counter;
 
 // initial state
 initial
@@ -51,6 +51,8 @@ begin
 	out <= 0;
 	buffer_oe <= 0;
 	out_en <= 0;
+
+	status <= 0;
 
 	// reset counter as well
 	sck_counter <= 0;
@@ -102,14 +104,12 @@ begin
 			STATE_SHIFT: begin
 				// is CS high now?
 				if(!spi_nCS) begin
-					// is it the positive edge of sck?
-					// if(posedge spi_sck) begin
-						// if so, increment the counter
-						sck_counter <= sck_counter + 1;
+					// now, copy the value to the appropriate output
+					// out[sck_counter - 1] = 1;
+					out[sck_counter] = spi_mosi;
 
-						// now, copy the value to the appropriate output
-						out[sck_counter] = spi_mosi;
-					// end
+					// increment the bit counter
+					sck_counter <= sck_counter + 1;
 
 					// stay in this state
 					state <= STATE_SHIFT;

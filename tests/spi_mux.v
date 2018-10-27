@@ -38,14 +38,20 @@ module spi_mux_test;
     // assert reset
     #3 begin reset = 1; end
 
+    #2 begin end
+
     // timings and shit
     #1 begin spi_nCS = 0; end
     #1 begin spi_mosi = 1; end
     #2 begin spi_mosi = 0; end
-    #14 begin spi_nCS = 1; end
+    #6 begin spi_mosi = 1; end
+    #2 begin spi_mosi = 0; end
+    #14 begin spi_mosi = 1; end
+    #2 begin spi_mosi = 0; end
+    #6 begin spi_nCS = 1; end
 
 
-    #1 begin $finish; end
+    #2 begin $finish; end
   end
 
   // overall kerjigger
@@ -55,26 +61,6 @@ module spi_mux_test;
   // actions
   always begin
     #1 begin clk = !clk; spi_sck = !spi_sck; end
-
-    // #1 begin spi_nCS = 0; spi_sck = 0; spi_mosi = 1; end
-    // #2 begin spi_nCS = 0; spi_sck = 1; spi_mosi = 1; end
-    // #3 begin spi_nCS = 0; spi_sck = 0; spi_mosi = 0; end
-    // #4 begin spi_nCS = 0; spi_sck = 1; spi_mosi = 0; end
-    // #5 begin spi_nCS = 0; spi_sck = 0; spi_mosi = 1; end
-    // #6 begin spi_nCS = 0; spi_sck = 1; spi_mosi = 1; end
-    // #7 begin spi_nCS = 0; spi_sck = 0; spi_mosi = 0; end
-    // #8 begin spi_nCS = 0; spi_sck = 1; spi_mosi = 0; end
-    // #9 begin spi_nCS = 0; spi_sck = 0; spi_mosi = 1; end
-    // #10 begin spi_nCS = 0; spi_sck = 1; spi_mosi = 1; end
-    // #11 begin spi_nCS = 0; spi_sck = 0; spi_mosi = 0; end
-    // #12 begin spi_nCS = 0; spi_sck = 1; spi_mosi = 0; end
-    // #13 begin spi_nCS = 0; spi_sck = 0; spi_mosi = 1; end
-    // #14 begin spi_nCS = 0; spi_sck = 1; spi_mosi = 1; end
-    // #15 begin spi_nCS = 0; spi_sck = 0; spi_mosi = 0; end
-    // #16 begin spi_nCS = 0; spi_sck = 1; spi_mosi = 0; end
-    // #17 begin spi_nCS = 1; spi_sck = 0; spi_mosi = 0; end
-
-    // #20 $finish;
   end
 
   // rest of testbench
