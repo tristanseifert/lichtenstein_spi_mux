@@ -41,7 +41,10 @@ parameter	STATE_RESET	= 4'b1000;
 reg		[3:0] state = STATE_IDLE;
 
 // counter for pulses of SCK
-reg		[2:0]	sck_counter;
+// reg		[2:0]	sck_counter;
+
+// buffer for output stat
+reg		[7:0] out_buf;
 
 // initial state
 initial
@@ -54,8 +57,8 @@ begin
 
 	status <= 0;
 
-	// reset counter as well
-	sck_counter <= 0;
+	// reset output buffer
+	out_buf <= 0;
 end
 
 // always @(posedge clk, posedge spi_sck)
@@ -80,11 +83,14 @@ begin
 
 		// clear the counter and state
 		state <= STATE_RESET;
-		sck_counter <= 0;
+		out_buf <= 0;
 
 		// deassert MISO
 		// spi_miso <= 1'bz;
 	end else begin
+		// enable differential drivers
+		out_en <= 4'b1111;
+
 		// reset is not asserted, do state machine-y stuff
 		case (state)
 			// reset state
@@ -106,10 +112,13 @@ begin
 				if(!spi_nCS) begin
 					// now, copy the value to the appropriate output
 					// out[sck_counter - 1] = 1;
-					out[sck_counter] = spi_mosi;
+					// out[sck_counter] = spi_mosi;
 
 					// increment the bit counter
-					sck_counter <= sck_counter + 1;
+					out_buf <= {out_buf[6:0], spi_mosi};
+
+					// output it
+					out <= out_buf;
 
 					// stay in this state
 					state <= STATE_SHIFT;
@@ -118,7 +127,7 @@ begin
 					state <= STATE_IDLE;
 
 					// be sure to reset counter
-					sck_counter <= 0;
+					out_buf <= 0;
 				end
 			end
 		endcase

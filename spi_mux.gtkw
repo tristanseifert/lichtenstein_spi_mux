@@ -1,0 +1,70 @@
+[*]
+[*] GTKWave Analyzer v3.3.95 (w)1999-2018 BSI
+[*] Sat Oct 27 16:16:23 2018
+[*]
+[dumpfile] "/Users/tristan/lichtenstein/spi_mux/spi_mux.vcd"
+[dumpfile_mtime] "Sat Oct 27 16:15:49 2018"
+[dumpfile_size] 1642
+[savefile] "/Users/tristan/lichtenstein/spi_mux/spi_mux.gtkw"
+[timestart] 0
+[size] 1440 855
+[pos] -1 -1
+*-2.923634 39 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] spi_mux_test.
+[sst_width] 193
+[signals_width] 133
+[sst_expanded] 1
+[sst_vpaned_height] 256
+@28
+spi_mux_test.U0.clk
+spi_mux_test.U0.reset
+[color] 2
+spi_mux_test.U0.spi_nCS
+[color] 2
+spi_mux_test.U0.spi_sck
+[color] 2
+spi_mux_test.U0.spi_mosi
+[color] 2
+spi_mux_test.U0.spi_miso
+@800029
+[color] 6
+spi_mux_test.U0.out[7:0]
+@29
+(0)spi_mux_test.U0.out[7:0]
+(1)spi_mux_test.U0.out[7:0]
+(2)spi_mux_test.U0.out[7:0]
+(3)spi_mux_test.U0.out[7:0]
+(4)spi_mux_test.U0.out[7:0]
+(5)spi_mux_test.U0.out[7:0]
+(6)spi_mux_test.U0.out[7:0]
+(7)spi_mux_test.U0.out[7:0]
+@800029
+spi_mux_test.U0.out_buf[7:0]
+@29
+(0)spi_mux_test.U0.out_buf[7:0]
+(1)spi_mux_test.U0.out_buf[7:0]
+(2)spi_mux_test.U0.out_buf[7:0]
+(3)spi_mux_test.U0.out_buf[7:0]
+(4)spi_mux_test.U0.out_buf[7:0]
+(5)spi_mux_test.U0.out_buf[7:0]
+(6)spi_mux_test.U0.out_buf[7:0]
+(7)spi_mux_test.U0.out_buf[7:0]
+@1001201
+-group_end
+-group_end
+@24
+spi_mux_test.U0.state[3:0]
+@c00028
+spi_mux_test.U0.out_en[3:0]
+@28
+(0)spi_mux_test.U0.out_en[3:0]
+(1)spi_mux_test.U0.out_en[3:0]
+(2)spi_mux_test.U0.out_en[3:0]
+(3)spi_mux_test.U0.out_en[3:0]
+@1401200
+-group_end
+@28
+spi_mux_test.U0.buffer_oe
+spi_mux_test.U0.status[2:0]
+[pattern_trace] 1
+[pattern_trace] 0
